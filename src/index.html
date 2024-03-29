@@ -3,111 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>CodePen - MediaPipe HandLandmarker Task for web</title>
-<link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
-<script type="module" src="script.js"></script>
-<link href="./output.css" rel="stylesheet">
-
-<style>
-@use "@material";
-body {
-  font-family: roboto;
-  margin: 2em;
-  color: #3d3d3d;
-  --mdc-theme-primary: #007f8b;
-  --mdc-theme-on-primary: #f1f3f4;
-}
-
-h1 {
-  color: #007f8b;
-}
-
-h2 {
-  clear: both;
-}
-
-em {
-  font-weight: bold;
-}
-
-video {
-  clear: both;
-  display: block;
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-}
-
-section {
-  opacity: 1;
-  transition: opacity 500ms ease-in-out;
-}
-
-header,
-footer {
-  clear: both;
-}
-
-.removed {
-  display: none;
-}
-
-.invisible {
-  opacity: 0.2;
-}
-
-.note {
-  font-style: italic;
-  font-size: 130%;
-}
-
-.videoView {
-  position: relative;
-  float: left;
-  width: 48%;
-  margin: 2% 1%;
-  cursor: pointer;
-}
-
-.videoView p{
-  position: absolute;
-  padding: 5px;
-  background-color: #007f8b;
-  color: #fff;
-  border: 1px dashed rgba(255, 255, 255, 0.7);
-  z-index: 2;
-  font-size: 12px;
-  margin: 0;
-}
-
-.highlighter {
-  background: rgba(0, 255, 0, 0.25);
-  border: 1px dashed #fff;
-  z-index: 1;
-  position: absolute;
-}
-
-.canvas {
-  z-index: 1;
-  position: absolute;
-  pointer-events: none;
-}
-
-.output_canvas {
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-}
-
-
-</style>
+  <script type="module" src="script.js"></script>
+  <link href="./output.css" rel="stylesheet">
 
 </head>
 <body>
-  <h1>Hand landmark detection using the MediaPipe HandLandmarker task</h1>
+  <h1 class="underline">Hand landmark detection using the MediaPipe HandLandmarker task</h1>
 
   <section id="demos" class="invisible">
 
@@ -128,13 +34,23 @@ footer {
     </div>
   </section>
 
-  <textarea name="handPoseLogger" id="handPoseLogger" cols="30" rows="10"></textarea>
 
-<button type="button" id="logHandPose">Click Me</button>
-<div id="saveCount" style="font-weight: 600;"></div>
-<button type="button" id="savePosesButton">Save Poses</button>
-<button type="button" id="showPoses">Show Poses</button>
-<div id="poseOutput"></div>
+
+<div class="flex flex-col w-1/5">
+<div>
+    <div class="mt-2">
+      <textarea rows="4" name="comment" id="poseOutput" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+    </div>
+  </div>
+  <div id="errors" class="text-red-500"></div>
+  <button type="button" id="logHandPose" class="mdc-button mdc-button--raised">logHandPose</button>
+
+  <div id="saveCount" class="font-bold"></div>
+
+  <button type="button" id="savePosesButton" class="mdc-button ">💾 Save Poses</button>
+  <button type="button" id="showPoses" class="mdc-button mdc-button--raised ">Show Poses</button>
+  <div ></div>
+</div>
 
 </body>
 </html>

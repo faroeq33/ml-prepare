@@ -8,6 +8,7 @@ let handLandmarker = undefined;
 let runningMode = "IMAGE";
 let enableWebcamButton;
 let webcamRunning = false;
+
 // Before we can use HandLandmarker class we must wait for it to finish
 // loading. Machine Learning models can be large and take a moment to
 // get everything needed to run.
@@ -113,19 +114,20 @@ let myPoses = [];
 document.getElementById("logHandPose").addEventListener("click", (e) => {
   onCapturePose(e);
 });
-function onCapturePose() {
-  // console.log("logHandPose");
 
+function onCapturePose() {
   if (!results) {
-    console.warn(
-      "The results global variable is not set yet. Turn on your webcam to detect your hand pose and click the button again."
-    );
+    const message =
+      "The 'results' global variable is not set yet. Turn on your webcam to detect your hand pose and click the button again.";
+    console.warn(message);
+
+    document.getElementById("errors").innerHTML = message;
     return;
   }
 
   const pose = results.landmarks[0];
   const vectorisedPose = convertPoseToVector(pose);
-  const labeledPose = [vectorisedPose, "mute"];
+  const labeledPose = { vector: vectorisedPose, label: "mute" };
   myPoses.push(labeledPose);
 
   // notify user
@@ -147,27 +149,20 @@ document
   .addEventListener("click", onSavePoses);
 
 function onSavePoses() {
-  const currentdate = new Date();
-  const datetime =
-    currentdate.getDate() +
-    "-" +
-    (currentdate.getMonth() + 1) +
-    "-" +
-    currentdate.getFullYear() +
-    "@" +
-    currentdate.getHours() +
-    ":" +
-    currentdate.getMinutes() +
-    ":" +
-    currentdate.getSeconds();
   // console.log(datetime);
+
+  // Choose a target file to save the poses
+  savePosesToFile();
 
   // localStorage.setItem(`myPoses-${datetime}`, JSON.stringify(myPoses));
 
-  console.log("Poses saved to local storage");
+  console.log("Poses saved to file");
 }
 
 function saveCount() {
+  if (myPoses.length === 0) {
+    console.warn("'myPoses' is empty. Please capture a pose first.");
+  }
   console.log("saveCount");
   document.getElementById("saveCount").innerHTML =
     myPoses.length + " poses saved";
@@ -181,4 +176,32 @@ function showData() {
   // console.log(myPoses);
 
   document.getElementById("poseOutput").innerHTML = JSON.stringify(myPoses);
+}
+
+function savePosesToFile() {
+  // localStorage.setItem(`myPoses-${datetime}`, JSON.stringify(myPoses));
+  const currentdate = new Date();
+
+  const datetime =
+    currentdate.getDate() +
+    "-" +
+    (currentdate.getMonth() + 1) +
+    "-" +
+    currentdate.getFullYear() +
+    "@" +
+    currentdate.getHours() +
+    "h" +
+    currentdate.getMinutes() +
+    "m" +
+    currentdate.getSeconds() +
+    "s";
+
+  const finalPoses = JSON.stringify({ data: myPoses }, null, 2);
+  const blob = new Blob([finalPoses], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `poses-${datetime}.json`;
+  link.click();
+  URL.revokeObjectURL(url);
 }

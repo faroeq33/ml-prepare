@@ -1,0 +1,2 @@
+Waarom moet er een handLandmarker worden aangemaakt?
+Waar is predicthwebcam voor?
