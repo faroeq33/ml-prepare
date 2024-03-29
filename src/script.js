@@ -99,7 +99,7 @@ async function predictWebcam() {
         color: "#00FF00",
         lineWidth: 5,
       });
-      drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 2 });
+      drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 1 });
     }
   }
   canvasCtx.restore();
@@ -111,7 +111,7 @@ async function predictWebcam() {
 
 let myPoses = [];
 
-document.getElementById("logHandPose").addEventListener("click", (e) => {
+document.getElementById("captureHandPose").addEventListener("click", (e) => {
   onCapturePose(e);
 });
 
@@ -121,13 +121,16 @@ function onCapturePose() {
       "The 'results' global variable is not set yet. Turn on your webcam to detect your hand pose and click the button again.";
     console.warn(message);
 
+    // write the message to the page
     document.getElementById("errors").innerHTML = message;
     return;
   }
 
-  const pose = results.landmarks[0];
-  const vectorisedPose = convertPoseToVector(pose);
-  const labeledPose = { vector: vectorisedPose, label: "mute" };
+  const labeledPose = {
+    vector: convertPoseToVector(results.landmarks[0]),
+    label: "mute",
+  };
+
   myPoses.push(labeledPose);
 
   // notify user
@@ -151,7 +154,7 @@ document
 function onSavePoses() {
   // console.log(datetime);
 
-  // Choose a target file to save the poses
+  // Choose a stragagy to save the poses, could be file, localstorage, or database
   savePosesToFile();
 
   // localStorage.setItem(`myPoses-${datetime}`, JSON.stringify(myPoses));
