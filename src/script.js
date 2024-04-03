@@ -122,13 +122,13 @@ function onCapturePose() {
     console.warn(message);
 
     // write the message to the page
-    document.getElementById("errors").innerHTML = message;
+    writeErrorsToPage(message);
     return;
   }
 
   const labeledPose = {
+    label: getLabelValue(), //
     vector: convertPoseToVector(results.landmarks[0]),
-    label: "mute",
   };
 
   myPoses.push(labeledPose);
@@ -136,6 +136,24 @@ function onCapturePose() {
   // notify user
   saveCount();
   // console.log(myPoses);
+
+  // write in text area
+  showData();
+
+  console.log("Pose captured");
+}
+function getLabelValue() {
+  const labelValue = document.getElementById("poseLabel").value;
+
+  if (!labelValue) {
+    const message = "Please enter a label for the pose";
+    console.warn(message);
+
+    // write the message to the page
+    writeErrorsToPage(message);
+    return;
+  }
+  return labelValue;
 }
 
 function convertPoseToVector(pose) {
@@ -175,10 +193,14 @@ const showPosesButton = document.getElementById("showPoses");
 showPosesButton.addEventListener("click", showData);
 
 function showData() {
-  console.log("showData");
+  console.log("showData is called");
   // console.log(myPoses);
 
-  document.getElementById("poseOutput").innerHTML = JSON.stringify(myPoses);
+  document.getElementById("poseOutput").innerHTML = JSON.stringify(
+    myPoses,
+    null,
+    2
+  );
 }
 
 function savePosesToFile() {
@@ -207,4 +229,8 @@ function savePosesToFile() {
   link.download = `poses-${datetime}.json`;
   link.click();
   URL.revokeObjectURL(url);
+}
+
+function writeErrorsToPage(message) {
+  document.getElementById("errors").innerHTML = message;
 }
